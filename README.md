@@ -3,13 +3,13 @@
 Improvements over Alcatraz - 
 Fix various GUI bugs. Improve search functionality.
 Added Passes:
-instruction outlining with anti-xref
-pop rax obfuscation
-return obfuscation
-xor obfuscation
-cmp obfuscation (unstable)
-call obfuscation
-stack obfuscation (add rsp / sub rsp)
+- instruction outlining with anti-xref
+- pop rax obfuscation
+- return obfuscation
+- xor obfuscation
+- cmp obfuscation (unstable)
+- call obfuscation
+- stack obfuscation (add rsp / sub rsp)
 
 
 Alcatraz is a x64 binary obfuscator that is able to obfuscate various different pe files including: 

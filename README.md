@@ -1,6 +1,6 @@
 # Alcatraz
 
-Improvements over Alcatraz - 
+Improvements over Alcatraz:
 Fix various GUI bugs. 
 Improve search functionality.
 Added Passes:

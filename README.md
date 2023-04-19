@@ -1,8 +1,8 @@
 # Alcatraz
 
-Improvements over Alcatraz:
-Fix various GUI bugs. 
-Improve search functionality.
+Improvements over Alcatraz:  
+Fix various GUI bugs.   
+Improve search functionality.  
 Added Passes:
 - instruction outlining with anti-xref
 - pop rax obfuscation

@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\pe">
+      <UniqueIdentifier>{b6712773-dd1f-4c86-8ff4-20a4ceb6c25c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\pdbparser">
+      <UniqueIdentifier>{9b2f408d-e68f-41b5-bfcd-67ed1770e511}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\obfuscator">
+      <UniqueIdentifier>{dbf78046-30db-4f6f-aaeb-f97bf99274d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\obfuscator\passes">
+      <UniqueIdentifier>{dff3db56-3cf7-4e9a-aa39-f68fcff27846}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\obfuscator\misc">
+      <UniqueIdentifier>{ba8f128b-d22c-45b9-8d59-17718529e3c5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pe\pe.cpp">
+      <Filter>Header Files\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="pdbparser\pdbparser.cpp">
+      <Filter>Header Files\pdbparser</Filter>
+    </ClCompile>
+    <ClCompile Include="obfuscator\obfuscator.cpp">
+      <Filter>Header Files\obfuscator</Filter>
+    </ClCompile>
+    <ClCompile Include="obfuscator\passes\lea.cpp">
+      <Filter>Header Files\obfuscator\passes</Filter>
+    </ClCompile>
+    <ClCompile Include="obfuscator\misc\cfflattener.cpp">
+      <Filter>Header Files\obfuscator\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="obfuscator\misc\iat.cpp">
+      <Filter>Header Files\obfuscator\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="obfuscator\passes\antidisassembly.cpp">
+      <Filter>Header Files\obfuscator\passes</Filter>
+    </ClCompile>
+    <ClCompile Include="obfuscator\passes\mov.cpp">
+      <Filter>Header Files\obfuscator\passes</Filter>
+    </ClCompile>
+    <ClCompile Include="obfuscator\passes\add.cpp">
+      <Filter>Header Files\obfuscator\passes</Filter>
+    </ClCompile>
+    <ClCompile Include="obfuscator\misc\custom_entry.cpp">
+      <Filter>Header Files\obfuscator\misc</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pe\pe.h">
+      <Filter>Header Files\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="pdbparser\pdbparser.h">
+      <Filter>Header Files\pdbparser</Filter>
+    </ClInclude>
+    <ClInclude Include="obfuscator\obfuscator.h">
+      <Filter>Header Files\obfuscator</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -68,13 +68,44 @@ pdbparser::~pdbparser() {
 	SymCleanup(GetCurrentProcess());
 }
 
+int iterator = 0;
+
+struct callb_str {
+	DWORD64 base;
+	std::vector<pdbparser::sym_func>* collector;
+};
+
+
+DWORD __stdcall collect_callback(PSYMBOL_INFO psym_info, ULONG sym_size, PVOID collector) {
+	if (psym_info->Tag == SymTagFunction) {
+
+		callb_str* callbstr = reinterpret_cast<callb_str*>(collector);
+
+		pdbparser::sym_func new_function{};
+		auto status =
+			SymGetTypeInfo(GetCurrentProcess(), callbstr->base, psym_info->Index, TI_GET_OFFSET, &new_function.offset);
+
+		if (!status)
+			SymGetTypeInfo(GetCurrentProcess(), callbstr->base, psym_info->Index, TI_GET_ADDRESSOFFSET, &new_function.offset);
+
+		auto elem = std::find_if(callbstr->collector->begin(), callbstr->collector->end(), [&](const pdbparser::sym_func func) {return func.offset == new_function.offset; });
+
+		if (elem == callbstr->collector->end()) {
+			new_function.id = iterator++;
+			new_function.name = psym_info->Name;
+			new_function.size = psym_info->Size;
+
+			callbstr->collector->push_back(new_function);
+		}
+
+
+	}
+	return TRUE;
+};
+
 std::vector<pdbparser::sym_func>pdbparser::parse_functions() {
 
-	struct callb_str {
-		DWORD64 base;
-		std::vector<sym_func>* collector;
-	};
-
+	iterator = 0;
 	std::vector<sym_func>functions;
 
 	std::vector<uint32_t>already_added;
@@ -82,34 +113,7 @@ std::vector<pdbparser::sym_func>pdbparser::parse_functions() {
 	callb_str callbstr;
 	callbstr.base = reinterpret_cast<DWORD64>(this->module_base);
 	callbstr.collector = &functions;
-	static int iterator = 0;
-	const auto collect_callback =
-		[](PSYMBOL_INFO psym_info, ULONG sym_size, PVOID collector) {
-		if (psym_info->Tag == SymTagFunction) {
-
-			callb_str* callbstr = reinterpret_cast<callb_str*>(collector);
-
-			sym_func new_function{};
-			auto status = 
-				SymGetTypeInfo(GetCurrentProcess(), callbstr->base, psym_info->Index, TI_GET_OFFSET, &new_function.offset);
-
-			if (!status)
-				SymGetTypeInfo(GetCurrentProcess(), callbstr->base, psym_info->Index, TI_GET_ADDRESSOFFSET, &new_function.offset);
-
-			auto elem = std::find_if(callbstr->collector->begin(), callbstr->collector->end(), [&](const sym_func func) {return func.offset == new_function.offset; });
-
-			if (elem == callbstr->collector->end()) {
-				new_function.id = iterator++;
-				new_function.name = psym_info->Name;
-				new_function.size = psym_info->Size;
-
-				callbstr->collector->push_back(new_function);
-			}
-
-		
-		}
-		return TRUE;
-	};
+	
 
 	if(!SymEnumSymbols(GetCurrentProcess(), reinterpret_cast<DWORD64>(this->module_base), NULL, (PSYM_ENUMERATESYMBOLS_CALLBACK)collect_callback, &callbstr))
 		throw std::runtime_error("couldn't enum symbols");

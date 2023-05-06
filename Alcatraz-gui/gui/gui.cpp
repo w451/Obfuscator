@@ -50,12 +50,16 @@ void gui::render_interface() {
 				ofn.lpstrTitle = "Select your file.";
 				ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST;
 				GetOpenFileNameA(&ofn);
-
+				
 				if (!std::filesystem::exists(filename)) {
 					MessageBoxA(0, "Couldn't find file!", "Error", 0);
+					path = std::string("");
+					selected_func = 0;
+					funcs_to_obfuscate.clear();
+					funcs.clear();
 				}
 				else {
-					path = filename;
+					path = std::string(filename);
 					funcs_to_obfuscate.clear();
 					funcs.clear();
 					try {
@@ -64,7 +68,7 @@ void gui::render_interface() {
 					catch (std::runtime_error e)
 					{
 						MessageBoxA(0, e.what(), "Exception", 0);
-						path = "";
+						path = std::string("");
 					}
 					selected_func = 0;					
 				}
@@ -77,7 +81,7 @@ void gui::render_interface() {
 		ImGui::EndMenuBar();
 	}
 
-	if (path.size()) {
+	if (path.size() > 0) {
 
 		ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.12f, 0.12f, 0.12f, 1.f));
 		ImGui::BeginChild("selectionpanel", ImVec2(100, 800), false, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
@@ -207,10 +211,12 @@ void gui::render_interface() {
 			auto obfFunc = std::find_if(funcs_to_obfuscate.begin(), funcs_to_obfuscate.end(), [&](const pdbparser::sym_func infunc) { return infunc.id == selected_func; });
 			auto exmFunc = std::find_if(funcs.begin(), funcs.end(), [&](const pdbparser::sym_func infunc) { return infunc.id == selected_func; });
 
+			
+
 			bool inObf = obfFunc != funcs_to_obfuscate.end();
 			bool inExempt = exmFunc != funcs.end();
-
 			auto func = inObf ? obfFunc : exmFunc;
+			
 
 			ImGui::Text("Name : %s", func->name.c_str());
 			ImGui::Text("Address : %x", func->offset);

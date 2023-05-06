@@ -11,7 +11,7 @@ Added Passes:
 - cmp obfuscation (unstable)
 - call obfuscation
 - stack obfuscation (add rsp / sub rsp)
-
+- greatly improved entry point obf
 
 Alcatraz is a x64 binary obfuscator that is able to obfuscate various different pe files including: 
 - .exe

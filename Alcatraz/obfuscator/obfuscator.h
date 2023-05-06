@@ -7,11 +7,18 @@
 #include <algorithm>
 #include <unordered_map>
 #include <asmjit/asmjit.h>
+#include <random>
 using namespace asmjit;
+static int currentFuncId = LONG_MAX - 0x100000;
+static int currentInstrId = LONG_MAX - 0x100000;
+#define NEXT_FUNC() (currentFuncId++)
+#define NEXT_INSTR() (currentInstrId++)
 
 bool is_jmpcall(ZydisDecodedInstruction instr);
 bool is_stackop(ZydisDecodedInstruction instr);
 bool is_ripop(ZydisDecodedInstruction instr);
+ULONG64 getSyscallId();
+ULONG64 getRand64();
 
 class obfuscator {
 private:
@@ -31,8 +38,6 @@ private:
 	std::vector<function_t>functions;
 
 	uint32_t total_size_used;
-
-	void add_custom_entry(PIMAGE_SECTION_HEADER new_section);
 
 	bool find_inst_at_dst(uint64_t dst, instruction_t** instptr, function_t** funcptr);
 
@@ -60,8 +65,7 @@ private:
 
 	bool flatten_control_flow(std::vector<obfuscator::function_t>::iterator& func_iter);
 	bool obfuscate_iat_call(std::vector<obfuscator::function_t>::iterator& func_iter, std::vector<obfuscator::instruction_t>::iterator& instruction_iter);
-	__declspec(safebuffers)  int custom_dll_main(HINSTANCE instance, DWORD fdwreason, LPVOID reserved); void custom_dll_main_end();
-	__declspec(safebuffers)  int custom_main(int argc, char* argv[]); void custom_main_end();
+	void add_custom_entry(PIMAGE_SECTION_HEADER* new_section);
 
 	/*
 		These are our actual obfuscation passes
@@ -86,7 +90,7 @@ public:
 
 	void create_functions(std::vector<pdbparser::sym_func>functions);
 
-	void run(PIMAGE_SECTION_HEADER new_section, GlobalArgs args);
+	void run(PIMAGE_SECTION_HEADER* new_section, GlobalArgs args);
 
 	uint32_t get_added_size();
 

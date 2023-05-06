@@ -30,7 +30,7 @@ void inter::run_obfuscator(std::vector<pdbparser::sym_func> funcs, GlobalArgs ar
 
 	obfuscator obf(&pe);
 	obf.create_functions(funcs);
-	obf.run(new_section, args);
+	obf.run(&new_section, args);
 
 
 	pe.save_to_disk(std::filesystem::path(binary_path).replace_extension().string() + ".obf" + extension.string(), new_section, obf.get_added_size());

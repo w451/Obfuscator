@@ -217,7 +217,7 @@ void gui::render_interface() {
 			ImGui::Text("Size : %i bytes", func->size);
 
 			ImGui::Checkbox("Control flow flattening", &func->ctfflattening);
-			ImGui::Checkbox("Immediate MOV obfuscation", &func->movobf);
+			ImGui::Checkbox("MOV obfuscation", &func->movobf);
 			ImGui::Checkbox("Add obfuscation", &func->addobf);
 			ImGui::Checkbox("LEA obfuscation", &func->leaobf);
 			ImGui::Checkbox("Anti disassembly *", &func->antidisassembly);

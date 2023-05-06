@@ -3,6 +3,19 @@
 #include <iostream>
 
 
+
+
+ULONG64 getSyscallId() {
+	return 0x6aaaaaaaaaaaaaaa;
+}
+
+ULONG64 getRand64() {
+	std::random_device rd;
+	std::mt19937_64 e2(rd());
+	std::uniform_int_distribution<ULONG64> dist(0, ULLONG_MAX);
+	return dist(e2);
+}
+
 ZydisFormatter formatter;
 ZydisDecoder decoder;
 
@@ -22,9 +35,6 @@ obfuscator::obfuscator(pe64* pe) {
 }
 
 void obfuscator::create_functions(std::vector<pdbparser::sym_func>functions) {
-
-	
-
 	auto text_section = this->pe->get_section(".text");
 
 	if (!text_section)
@@ -76,34 +86,6 @@ void obfuscator::create_functions(std::vector<pdbparser::sym_func>functions) {
 		this->functions.push_back(new_function);
 	}
 	
-}
-
-void obfuscator::add_custom_entry(PIMAGE_SECTION_HEADER new_section) {
-	
-
-
-	if (pe->get_path().find(".exe") != std::string::npos) {
-
-		auto jit_instructions = this->instructions_from_jit(std::bit_cast<uint8_t*>(&obfuscator::custom_main), std::bit_cast<uint64_t>(&obfuscator::custom_main_end) - std::bit_cast<uint64_t>(&obfuscator::custom_main));
-
-		for (auto inst = jit_instructions.begin(); inst != jit_instructions.end(); ++inst) {
-
-			void* address = (void*)(pe->get_buffer()->data() + new_section->VirtualAddress + this->total_size_used);
-			inst->relocated_address = (uint64_t)address;
-			memcpy(address, inst->raw_bytes.data(), inst->zyinstr.length);
-			this->total_size_used += inst->zyinstr.length;
-
-		}
-		pe->get_nt()->OptionalHeader.AddressOfEntryPoint = jit_instructions.at(0).relocated_address - (uint64_t)pe->get_buffer()->data();
-	}
-	else if (pe->get_path().find(".dll") != std::string::npos) {
-		throw std::runtime_error("File type doesn't support custom entry!\n");
-	}
-	else if (pe->get_path().find(".sys") != std::string::npos) {
-		throw std::runtime_error("File type doesn't support custom entry!\n");
-	}
-	else
-		throw std::runtime_error("File type doesn't support custom entry!\n");
 }
 
 bool obfuscator::find_inst_at_dst(uint64_t dst, instruction_t** instptr, function_t** funcptr) {
@@ -533,20 +515,15 @@ void obfuscator::compile(PIMAGE_SECTION_HEADER new_section) {
 
 }
 
-void obfuscator::run(PIMAGE_SECTION_HEADER new_section, GlobalArgs args) {
+void obfuscator::run(PIMAGE_SECTION_HEADER* new_section, GlobalArgs args) {
 
 	if (!this->analyze_functions())
 		throw std::runtime_error("couldn't analyze functions");
 
-	*(uint32_t*)(pe->get_buffer()->data() + new_section->VirtualAddress) = _rotl(pe->get_nt()->OptionalHeader.AddressOfEntryPoint, pe->get_nt()->FileHeader.TimeDateStamp)^ pe->get_nt()->OptionalHeader.SizeOfStackCommit;
-
 	code.init(rt.environment());
 	code.attach(&this->assm);
 
-
 	printf("OBFUSCATING: %llX\n", functions.size());
-
-	
 
 	//Actual obfuscation passes
 	for (auto func = functions.begin(); func != functions.end(); func++) {
@@ -649,11 +626,7 @@ void obfuscator::run(PIMAGE_SECTION_HEADER new_section, GlobalArgs args) {
 			}
 
 			if (func->antidisassembly) {
-				int randval = rand() % 20 + 1;
-
-				if (randval == 1) {
-					this->add_junk(func, instruction);
-				}
+				this->add_junk(func, instruction);
 			}
 		
 			
@@ -667,16 +640,16 @@ void obfuscator::run(PIMAGE_SECTION_HEADER new_section, GlobalArgs args) {
 	}
 	//printf("post: %d\n", functions.size());
 
-	this->relocate(new_section);
+	this->relocate(*new_section);
 
 	if(!this->convert_relative_jmps())
 		throw std::runtime_error("couldn't convert relative jmps");
 
-	if (!this->apply_relocations(new_section))
+	if (!this->apply_relocations(*new_section))
 		throw std::runtime_error("couldn't apply relocs");
 
-	this->compile(new_section);
-	if(args.obf_entry_point)
+	this->compile(*new_section);
+	if (args.obf_entry_point)
 		this->add_custom_entry(new_section);
 }
 

@@ -1,10 +1,6 @@
 #include "../obfuscator.h"
 
 
-int currentFuncId = LONG_MAX - 0x100000;
-int currentInstrId = LONG_MAX - 0x100000;
-#define NEXT_FUNC() (currentFuncId++)
-#define NEXT_INSTR() (currentInstrId++)
 
 int instrStrLen = 2;
 bool jmpLinking = true;

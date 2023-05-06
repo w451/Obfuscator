@@ -12,7 +12,6 @@ bool obfuscator::obfuscate_ff(std::vector<obfuscator::function_t>::iterator& fun
 }
 
 bool obfuscator::add_junk(std::vector<obfuscator::function_t>::iterator& function, std::vector<obfuscator::instruction_t>::iterator& instruction) {
-
 	//This has a weird bug. Going to fix
 	
 	/*

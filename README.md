@@ -1,7 +1,7 @@
 # Alcatraz fork
 
 Improvements over Alcatraz:  
-Fix various GUI bugs.   
+Fix various GUI bugs and crashes
 Improve search functionality.  
 Added Passes:
 - instruction outlining with anti-xref

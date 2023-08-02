@@ -16,6 +16,13 @@ ULONG64 getRand64() {
 	return dist(e2);
 }
 
+void asmJitIsBad(std::vector<uint8_t> bytes, x86::Assembler* trash) {
+	for (uint8_t u : bytes) {
+		trash->embedUInt8(u);
+	}
+}
+
+
 ZydisFormatter formatter;
 ZydisDecoder decoder;
 
@@ -69,6 +76,7 @@ void obfuscator::create_functions(std::vector<pdbparser::sym_func>functions) {
 		new_function.cmpobf = function.cmpobf;
 		new_function.callobf = function.callobf;
 		new_function.stackobf = function.stackobf;
+		new_function.incobf = function.incobf;
 
 		while (ZYAN_SUCCESS(ZydisDecoderDecodeBuffer(&decoder, (void*)(address_to_analyze + offset), function.size - offset, &zyinstruction))) {
 			
@@ -625,7 +633,14 @@ void obfuscator::run(PIMAGE_SECTION_HEADER* new_section, GlobalArgs args) {
 				}
 			}
 
-			if (func->antidisassembly) {
+			if (func->incobf) {
+				if (instruction->zyinstr.mnemonic == ZYDIS_MNEMONIC_INC && instruction->zyinstr.operands[0].type == ZYDIS_OPERAND_TYPE_REGISTER)
+				{
+					this->obfuscate_inc(func, instruction);
+				}
+			}
+
+			if (func->antidisassembly && rand()%40 == 0) {
 				this->add_junk(func, instruction);
 			}
 		

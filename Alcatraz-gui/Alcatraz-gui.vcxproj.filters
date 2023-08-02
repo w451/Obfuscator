@@ -126,6 +126,9 @@
     <ClCompile Include="..\Alcatraz\obfuscator\passes\stack.cpp">
       <Filter>Header Files\extern\obfuscator\passes</Filter>
     </ClCompile>
+    <ClCompile Include="..\Alcatraz\obfuscator\passes\inc.cpp">
+      <Filter>Header Files\extern\obfuscator\passes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gui\imgui\imconfig.h">

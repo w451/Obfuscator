@@ -17,12 +17,6 @@ typedef struct OBFSEQUENCE_ {
 	ULONG64 val;
 } OBFSEQUENCE;
 
-void asmJitIsBad(std::vector<uint8_t> bytes, x86::Assembler* trash) {
-	for (uint8_t u : bytes) {
-		trash->embedUInt8(u);
-	}
-}
-
 //(2x+1)(x+1)(x) < ULLMAX when x <= 2097151
 
 OBFSEQUENCE* generateSeq(int len) {

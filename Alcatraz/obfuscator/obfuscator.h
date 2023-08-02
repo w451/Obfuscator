@@ -14,6 +14,8 @@ static int currentInstrId = LONG_MAX - 0x100000;
 #define NEXT_FUNC() (currentFuncId++)
 #define NEXT_INSTR() (currentInstrId++)
 
+void asmJitIsBad(std::vector<uint8_t> bytes, x86::Assembler* trash);
+
 bool is_jmpcall(ZydisDecodedInstruction instr);
 bool is_stackop(ZydisDecodedInstruction instr);
 bool is_ripop(ZydisDecodedInstruction instr);
@@ -80,6 +82,7 @@ private:
 	bool obfuscate_return(std::vector<obfuscator::function_t>::iterator& function, std::vector<obfuscator::instruction_t>::iterator& instruction);
 	bool obfuscate_xor(std::vector<obfuscator::function_t>::iterator& function, std::vector<obfuscator::instruction_t>::iterator& instruction);
 	bool obfuscate_cmp(std::vector<obfuscator::function_t>::iterator& function, std::vector<obfuscator::instruction_t>::iterator& instruction);
+	bool obfuscate_inc(std::vector<obfuscator::function_t>::iterator& function, std::vector<obfuscator::instruction_t>::iterator& instruction);
 	bool convert_test(std::vector<obfuscator::function_t>::iterator& function, std::vector<obfuscator::instruction_t>::iterator& instruction);
 	bool obfuscate_call(std::vector<obfuscator::function_t>::iterator& function, std::vector<obfuscator::instruction_t>::iterator& instruction);
 	bool obfuscate_stack(std::vector<obfuscator::function_t>::iterator& function, std::vector<obfuscator::instruction_t>::iterator& instruction);
@@ -137,6 +140,7 @@ public:
 		bool movobf = true;
 		bool addobf = true;
 		bool leaobf = true;
+		
 		bool antidisassembly = true;
 		bool popobf = true;
 		bool retobf = true;
@@ -144,7 +148,7 @@ public:
 		bool cmpobf = true;
 		bool callobf = true;
 		bool stackobf = true;
-
+		bool incobf = true;
 	};
 
 	

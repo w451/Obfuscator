@@ -6,9 +6,6 @@ int instrStrLen = 2;
 bool jmpLinking = true;
 
 bool isInstrValid(obfuscator::instruction_t inst1) {
-
-
-
 	return inst1.zyinstr.mnemonic != ZYDIS_MNEMONIC_NOP && inst1.zyinstr.mnemonic != ZYDIS_MNEMONIC_INVALID && inst1.zyinstr.mnemonic != ZYDIS_MNEMONIC_RET && !is_jmpcall(inst1.zyinstr) && !is_stackop(inst1.zyinstr) && !is_ripop(inst1.zyinstr);
 }
 

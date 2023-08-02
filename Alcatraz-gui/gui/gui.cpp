@@ -233,6 +233,7 @@ void gui::render_interface() {
 			ImGui::Checkbox("Cmp obfuscation", &func->cmpobf);
 			ImGui::Checkbox("Call obfuscation *", &func->callobf);
 			ImGui::Checkbox("Stack obfuscation", &func->stackobf);
+			ImGui::Checkbox("Inc obfuscation", &func->incobf);
 
 			if (ImGui::Button("Apply current settings to all")) {
 				pdbparser::sym_func current;
@@ -260,6 +261,7 @@ void gui::render_interface() {
 						funcs.at(i).cmpobf = current.cmpobf;
 						funcs.at(i).callobf = current.callobf;
 						funcs.at(i).stackobf = current.stackobf;
+						funcs.at(i).incobf = current.incobf;
 					}
 				}
 				for (int i = 0; i < funcs_to_obfuscate.size(); i++) {
@@ -275,6 +277,7 @@ void gui::render_interface() {
 						funcs_to_obfuscate.at(i).cmpobf = current.cmpobf;
 						funcs_to_obfuscate.at(i).callobf = current.callobf;
 						funcs_to_obfuscate.at(i).stackobf = current.stackobf;
+						funcs_to_obfuscate.at(i).incobf = current.incobf;
 					}
 				}
 			}

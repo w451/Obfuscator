@@ -14,27 +14,25 @@ bool obfuscator::obfuscate_ff(std::vector<obfuscator::function_t>::iterator& fun
 bool obfuscator::add_junk(std::vector<obfuscator::function_t>::iterator& function, std::vector<obfuscator::instruction_t>::iterator& instruction) {
 	//This has a weird bug. Going to fix
 	
-	/*
-	instruction_t jz{}; jz.load(function->func_id, { 0x74, 0x3 });
-	instruction_t jnz{}; jnz.load(function->func_id, { 0x75, 0x1 });
-	instruction_t garbage{}; garbage.load(function->func_id, { 0xE8 });
-	instruction_t nop{}; nop.load(function->func_id, { 0x90 });
-	garbage.zyinstr = nop.zyinstr;
-	garbage.has_relative = false;
-	garbage.isjmpcall = false;
+	asmJitIsBad({0x51, 0xb9, 0x59, 0xeb, 0x04, 0x00, 0xeb, 0xfa}, &assm);
 
-	instruction = function->instructions.insert(instruction, jz);
-	instruction = function->instructions.insert(instruction + 1, jnz);
-	instruction = function->instructions.insert(instruction + 1, garbage);
+	void* fn = nullptr;
+	auto err = rt.add(&fn, &code);
+	auto jitinstructions = this->instructions_from_jit((uint8_t*)fn, code.codeSize());
+	for (auto jit : jitinstructions) {
+		jit.has_relative = false;
+		jit.isjmpcall = false;
+		instruction = function->instructions.insert(instruction + 1, jit);
+	}
 
-	(instruction - 2)->relative.target_func_id = function->func_id;
-	(instruction - 1)->relative.target_func_id = function->func_id;
+	instruction_t garbanzo{}; garbanzo.load(function->func_id, { (uint8_t)(rand()%255+1) });
+	garbanzo.isjmpcall = false;
+	garbanzo.has_relative = false;
+	instruction = function->instructions.insert(instruction + 1, garbanzo);
 
-	(instruction - 2)->relative.target_inst_id = (instruction + 1)->inst_id;
-	(instruction - 1)->relative.target_inst_id = (instruction + 1)->inst_id;
-	
-	instruction++;
-	*/
+	code.reset();
+	code.init(rt.environment());
+	code.attach(&this->assm);
 	return true;
 
 }

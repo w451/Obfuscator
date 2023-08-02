@@ -142,6 +142,7 @@
     <ClCompile Include="..\Alcatraz\obfuscator\passes\antidisassembly.cpp" />
     <ClCompile Include="..\Alcatraz\obfuscator\passes\call.cpp" />
     <ClCompile Include="..\Alcatraz\obfuscator\passes\cmp.cpp" />
+    <ClCompile Include="..\Alcatraz\obfuscator\passes\inc.cpp" />
     <ClCompile Include="..\Alcatraz\obfuscator\passes\lea.cpp" />
     <ClCompile Include="..\Alcatraz\obfuscator\passes\mov.cpp" />
     <ClCompile Include="..\Alcatraz\obfuscator\passes\outliner.cpp" />

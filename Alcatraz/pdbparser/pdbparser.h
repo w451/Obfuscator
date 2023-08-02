@@ -37,6 +37,7 @@ public:
 		bool cmpobf = true;
 		bool callobf = true;
 		bool stackobf = true;
+		bool incobf = true;
 	};
 
 	pdbparser(pe64* pe);

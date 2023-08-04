@@ -67,7 +67,7 @@ private:
 
 	bool flatten_control_flow(std::vector<obfuscator::function_t>::iterator& func_iter);
 	bool obfuscate_iat_call(std::vector<obfuscator::function_t>::iterator& func_iter, std::vector<obfuscator::instruction_t>::iterator& instruction_iter);
-	void add_custom_entry(PIMAGE_SECTION_HEADER* new_section);
+	void add_custom_entry(PIMAGE_SECTION_HEADER* new_section, long long count);
 
 	/*
 		These are our actual obfuscation passes

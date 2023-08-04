@@ -47,7 +47,7 @@ DWORD insertedId;
 //Previous seq is responsible for getting value to the target address
 //FEP (and now ) perform XOR
 
-constexpr long long SEQ_LEN = 1000;
+long long SEQ_LEN = 1000;
 
 typedef unsigned long long ULL;
 
@@ -241,7 +241,8 @@ void compilePredicate(OPAQUEPREDICATE op, x86::Assembler* assm) {
 	}
 }
 
-void obfuscator::add_custom_entry(PIMAGE_SECTION_HEADER* new_section) {
+void obfuscator::add_custom_entry(PIMAGE_SECTION_HEADER* new_section, long long count) {
+	SEQ_LEN = count;
 	if (pe->get_path().find(".exe") != std::string::npos) {
 		ULL entryAddress = pe->get_nt()->OptionalHeader.AddressOfEntryPoint;
 		ULL sectionOffset = (*new_section)->VirtualAddress + this->total_size_used;

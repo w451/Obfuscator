@@ -149,8 +149,20 @@ void gui::render_interface() {
 				}
 
 				if (ImGui::TreeNode("Globals")) {
-					ImGui::BeginChild("insidie2", ImVec2(300, globalArgs.outline_funcs ? 185 : 50)); //Need a child due to a bug in imgui causing the treenode to count as grabbing the slider...
+					int size = 50;
+					if (globalArgs.outline_funcs) {
+						size += 135;
+					}
+					if (globalArgs.obf_entry_point) {
+						size += 30;
+					}
+					ImGui::BeginChild("insidie2", ImVec2(300, size)); //Need a child due to a bug in imgui causing the treenode to count as grabbing the slider...
 					ImGui::Checkbox("Obfuscate entry point", &globalArgs.obf_entry_point);
+					if (globalArgs.obf_entry_point) {
+						ImGui::BeginChild("insidie4", ImVec2(300, 25));
+						ImGui::SliderInt("Strength", (int*)&globalArgs.obf_entry_seqs, 1, 100000, "%d", ImGuiSliderFlags_Logarithmic);
+						ImGui::EndChild();
+					}
 					ImGui::Checkbox("Outline functions", &globalArgs.outline_funcs);
 					if (globalArgs.outline_funcs) {
 						ImGui::Text("Max outlined funcs");

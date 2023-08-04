@@ -665,7 +665,7 @@ void obfuscator::run(PIMAGE_SECTION_HEADER* new_section, GlobalArgs args) {
 
 	this->compile(*new_section);
 	if (args.obf_entry_point)
-		this->add_custom_entry(new_section);
+		this->add_custom_entry(new_section, args.obf_entry_seqs);
 }
 
 uint32_t obfuscator::get_added_size() {

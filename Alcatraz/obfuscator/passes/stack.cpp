@@ -65,4 +65,5 @@ bool obfuscator::obfuscate_stack(std::vector<obfuscator::function_t>::iterator& 
 
 
 	}
+	return false;
 }

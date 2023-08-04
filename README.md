@@ -71,8 +71,9 @@ sub rcx, 1
 ```
 If you want to learn more about mutation take a look at [perses](https://github.com/mike1k/perses).
 ### Entry point obfuscation
-If the PE file is a .exe (.dll support will be added) we will create a custom entry point that decrypts the real one on startup (!!! doesn't work when beeing manual mapped).  
+If the PE file is a .exe we will create a custom entry point that decrypts the real one on startup. Flow in the decryption routine is obfuscated with opaque predicates and fake exit points (indistinguishable from the true/final exit point) which are involved in the decryption.  
 ![imgmaincfg](images/customentry.PNG)  
+![imgmaincfg](images/customentry2.PNG)  
 ### Lea obfuscation
 The lea obfuscation is quite simple yet effective. We move a different location into the register and decrypt it afterwards. This way, reverse engineers can't cross reference certain data / functions.  
 Let's say we find the following instruction: `lea rcx, [0xDEAD]`  

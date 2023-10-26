@@ -16,7 +16,7 @@ ULONG64 getRand64() {
 	return dist(e2);
 }
 
-void asmJitIsBad(std::vector<uint8_t> bytes, x86::Assembler* trash) {
+void asmJitEmbed(std::vector<uint8_t> bytes, x86::Assembler* trash) {
 	for (uint8_t u : bytes) {
 		trash->embedUInt8(u);
 	}

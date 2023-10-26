@@ -19,34 +19,6 @@ DWORD insertedId;
 #define PREDICATE_BITS1 0
 #define PREDICATE_BITS2 1
 
-//Need to save RAX, RBX, RCX, RDX, R8, R9, R10
-//Stored to    R10, R11, R12, R13, --, --, ---
-//Usable: 
-//Volatile: RBX, RCX, RDX
-//EntryAddress: R14
-//BaseAddress: R15
-
-//Entry routine:
-//mov R10, RAX
-//mov R11, RBX
-//mov R12, RCX
-//mov R13, RDX
-//mov R14, EncryptedEntryAddress
-//mov R14, BaseAddress
-
-//Exit routine:
-// jmp to r14+r15
-
-//Fake exit point:
-//Always ends a block, just like true exit
-//No predicate
-//Must jump to the start of another block
-//Do a address = "offset"
-//Predict block offset via knowing size
-
-//Previous seq is responsible for getting value to the target address
-//FEP (and now ) perform XOR
-
 long long SEQ_LEN = 1000;
 
 typedef unsigned long long ULL;
@@ -308,7 +280,7 @@ void obfuscator::add_custom_entry(PIMAGE_SECTION_HEADER* new_section, long long 
 					assm.movabs(lookupmap.find(ZYDIS_REGISTER_RCX)->second, obf.val);
 					assm.xor_(lookupmap.find(ZYDIS_REGISTER_R14)->second, lookupmap.find(ZYDIS_REGISTER_RCX)->second);
 				} else if (obf.type == TYPE_ROR_MAGIC) {
-					asmJitIsBad({0x41, 0x8a, 0x4f, (byte) obf.val}, &assm);//mov cl, byte ptr [r15+obf.val]
+					asmJitEmbed({0x41, 0x8a, 0x4f, (byte) obf.val}, &assm);//mov cl, byte ptr [r15+obf.val]
 					assm.ror(lookupmap.find(ZYDIS_REGISTER_R14)->second, lookupmap.find(ZYDIS_REGISTER_CL)->second);
 				} else if (obf.type == TYPE_ANTI_RECOMPILE) {
 					assm.push(lookupmap.find(ZYDIS_REGISTER_RAX)->second);
@@ -379,7 +351,7 @@ void obfuscator::add_custom_entry(PIMAGE_SECTION_HEADER* new_section, long long 
 
 		/*void* fn = nullptr;
 		auto err = rt.add(&fn, &code);
-		std::cout << "Pre cheb code: "<<code.codeSize() << std::endl;
+		std::cout << "Pre code: "<<code.codeSize() << std::endl;
 		std::vector<obfuscator::instruction_t> jitinstructions = this->instructions_from_jit((uint8_t*)fn, code.codeSize());
 		std::cout << "instrs: "<<  jitinstructions.size() << std::endl;
 		uint64_t offset = (uint64_t)(*new_section) - (uint64_t)pe->get_buffer()->data();

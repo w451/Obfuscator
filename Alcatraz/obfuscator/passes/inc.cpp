@@ -8,7 +8,7 @@ bool obfuscator::obfuscate_inc(std::vector<obfuscator::function_t>::iterator& fu
 		assm.push(x86::r14);
 		assm.mov(x86::r14, 0xffffffffffffffff);
 		assm.adcx(x86::r14, x86::r14);
-		asmJitIsBad({0x72, 0xf8}, &assm);
+		asmJitEmbed({0x72, 0xf8}, &assm);
 		assm.add(x86::r14, 1);
 		assm.adc(lookupmap.find(instruction->zyinstr.operands[0].reg.value)->second, x86::r14);
 		assm.pop(x86::r14);
@@ -16,7 +16,7 @@ bool obfuscator::obfuscate_inc(std::vector<obfuscator::function_t>::iterator& fu
 		assm.push(x86::r15);
 		assm.mov(x86::r15, 0xffffffffffffffff);
 		assm.adcx(x86::r15, x86::r15);
-		asmJitIsBad({ 0x72, 0xf8 }, &assm);
+		asmJitEmbed({ 0x72, 0xf8 }, &assm);
 		assm.add(x86::r15, 1);
 		assm.adc(lookupmap.find(instruction->zyinstr.operands[0].reg.value)->second, x86::r15);
 		assm.pop(x86::r15);

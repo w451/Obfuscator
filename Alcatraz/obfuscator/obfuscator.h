@@ -14,7 +14,7 @@ static int currentInstrId = LONG_MAX - 0x100000;
 #define NEXT_FUNC() (currentFuncId++)
 #define NEXT_INSTR() (currentInstrId++)
 
-void asmJitIsBad(std::vector<uint8_t> bytes, x86::Assembler* trash);
+void asmJitEmbed(std::vector<uint8_t> bytes, x86::Assembler* trash);
 
 bool is_jmpcall(ZydisDecodedInstruction instr);
 bool is_stackop(ZydisDecodedInstruction instr);

@@ -14,7 +14,7 @@ bool obfuscator::obfuscate_ff(std::vector<obfuscator::function_t>::iterator& fun
 bool obfuscator::add_junk(std::vector<obfuscator::function_t>::iterator& function, std::vector<obfuscator::instruction_t>::iterator& instruction) {
 	//This has a weird bug. Going to fix
 	
-	asmJitIsBad({0x51, 0xb9, 0x59, 0xeb, 0x04, 0x00, 0xeb, 0xfa}, &assm);
+	asmJitEmbed({0x51, 0xb9, 0x59, 0xeb, 0x04, 0x00, 0xeb, 0xfa}, &assm);
 
 	void* fn = nullptr;
 	auto err = rt.add(&fn, &code);
